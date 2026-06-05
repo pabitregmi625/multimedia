@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multimedia — Class 10 Computer Science</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #050810;
+    --bg-card: #0b0f1e;
+    --bg-panel: #0f1428;
+    --accent-cyan: #00f5ff;
+    --accent-blue: #0066ff;
+    --accent-violet: #7c3aed;
+    --accent-magenta: #ff006e;
+    --accent-green: #00ff88;
+    --text-primary: #e8f4fd;
+    --text-muted: #7a8ba3;
+    --border: rgba(0,245,255,0.15);
+    --glow-cyan: 0 0 20px rgba(0,245,255,0.4);
+    --glow-blue: 0 0 20px rgba(0,102,255,0.5);
+    --glow-violet: 0 0 20px rgba(124,58,237,0.5);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: 'Rajdhani', sans-serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ANIMATED BACKGROUND GRID */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,245,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,245,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+    animation: gridMove 20s linear infinite;
+  }
+
+  @keyframes gridMove {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(60px); }
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at 20% 20%, rgba(0,102,255,0.07) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(124,58,237,0.07) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(0,245,255,0.03) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    background: rgba(5,8,16,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--accent-cyan);
+    text-shadow: var(--glow-cyan);
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 0.3rem;
+    list-style: none;
+    flex-wrap: wrap;
+  }
+
+  .nav-links a {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 4px 8px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    transition: all 0.3s;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .nav-links a:hover {
+    color: var(--accent-cyan);
+    border-color: var(--accent-cyan);
+    background: rgba(0,245,255,0.05);
+    text-shadow: var(--glow-cyan);
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 2rem 4rem;
+    overflow: hidden;
+  }
+
+  .hero-badge {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: var(--accent-cyan);
+    text-transform: uppercase;
+    border: 1px solid rgba(0,245,255,0.3);
+    padding: 6px 20px;
+    border-radius: 2px;
+    margin-bottom: 2rem;
+    animation: fadeInDown 0.8s ease forwards;
+    background: rgba(0,245,255,0.04);
+  }
+
+  .hero h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(2.5rem, 8vw, 6rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    animation: fadeInUp 1s ease 0.2s both;
+  }
+
+  .hero h1 span.line1 { display: block; color: var(--text-primary); }
+  .hero h1 span.line2 {
+    display: block;
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue), var(--accent-violet));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 30px rgba(0,245,255,0.3));
+  }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin: 1.5rem 0 2rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    animation: fadeInUp 1s ease 0.4s both;
+  }
+
+  .hero-orbs {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.3;
+    animation: float 8s ease-in-out infinite;
+  }
+
+  .orb1 { width: 400px; height: 400px; background: var(--accent-blue); top: -10%; left: -10%; animation-delay: 0s; }
+  .orb2 { width: 300px; height: 300px; background: var(--accent-violet); bottom: -5%; right: -5%; animation-delay: -4s; }
+  .orb3 { width: 200px; height: 200px; background: var(--accent-cyan); top: 40%; right: 15%; animation-delay: -2s; }
+
+  @keyframes float {
+    0%,100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-30px) scale(1.05); }
+  }
+
+  .scroll-indicator {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    animation: fadeInUp 1s ease 0.8s both;
+  }
+
+  .scroll-indicator span {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(to bottom, var(--accent-cyan), transparent);
+    animation: scrollPulse 2s ease infinite;
+  }
+
+  @keyframes scrollPulse {
+    0%,100% { opacity: 0.3; transform: scaleY(1); }
+    50% { opacity: 1; transform: scaleY(1.2); }
+  }
+
+  /* TOPICS NAV GRID */
+  .topics-index {
+    position: relative;
+    z-index: 1;
+    padding: 4rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .section-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    color: var(--accent-cyan);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-title {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(1.2rem, 3vw, 2rem);
+    font-weight: 700;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .topics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+
+  .topic-card-mini {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.2rem;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .topic-card-mini::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--card-accent, var(--accent-cyan));
+  }
+
+  .topic-card-mini:hover {
+    border-color: var(--card-accent, var(--accent-cyan));
+    background: rgba(0,245,255,0.03);
+    transform: translateX(4px);
+    box-shadow: -4px 0 20px rgba(0,245,255,0.1);
+  }
+
+  .topic-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--card-accent, var(--accent-cyan));
+    opacity: 0.4;
+    min-width: 2.5rem;
+  }
+
+  .topic-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    line-height: 1.3;
+  }
+
+  /* SECTIONS */
+  .content-section {
+    position: relative;
+    z-index: 1;
+    padding: 5rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .divider-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--s-accent, var(--accent-cyan));
+    opacity: 0.2;
+    line-height: 1;
+    min-width: 4rem;
+  }
+
+  .divider-text h2 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(1rem, 2.5vw, 1.6rem);
+    font-weight: 700;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    line-height: 1.2;
+  }
+
+  .divider-text p {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--s-accent, var(--accent-cyan));
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-top: 0.3rem;
+  }
+
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--s-accent, var(--accent-cyan)), transparent);
+    opacity: 0.3;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+
+  .card:hover { border-color: rgba(0,245,255,0.3); }
+
+  .card::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 100px; height: 100px;
+    background: radial-gradient(circle, var(--s-accent, rgba(0,245,255,0.1)) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .card h3 {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--s-accent, var(--accent-cyan));
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 1rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .card p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #b8ccd8;
+    font-weight: 400;
+  }
+
+  .card ul {
+    list-style: none;
+    margin-top: 0.8rem;
+  }
+
+  .card ul li {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #b8ccd8;
+    padding: 0.4rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+
+  .card ul li:last-child { border-bottom: none; }
+
+  .card ul li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--s-accent, var(--accent-cyan));
+    font-size: 0.75rem;
+    top: 0.5rem;
+  }
+
+  .card ul li strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  /* GRID LAYOUTS */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; }
+
+  @media (max-width: 768px) {
+    .two-col, .three-col { grid-template-columns: 1fr; }
+    nav .nav-links { display: none; }
+  }
+
+  /* DEFINITION BOX */
+  .def-box {
+    background: linear-gradient(135deg, rgba(0,102,255,0.08), rgba(0,245,255,0.05));
+    border: 1px solid rgba(0,245,255,0.2);
+    border-left: 4px solid var(--s-accent, var(--accent-cyan));
+    border-radius: 0 8px 8px 0;
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #c8dde8;
+    font-style: italic;
+  }
+
+  /* HIGHLIGHT CHIPS */
+  .chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+
+  .chip {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    padding: 5px 14px;
+    border-radius: 3px;
+    border: 1px solid var(--s-accent, var(--accent-cyan));
+    color: var(--s-accent, var(--accent-cyan));
+    background: rgba(0,245,255,0.04);
+    text-transform: uppercase;
+  }
+
+  /* TABLE */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+  }
+
+  .data-table th {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--s-accent, var(--accent-cyan));
+    padding: 0.8rem 1rem;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+    background: rgba(0,245,255,0.03);
+  }
+
+  .data-table td {
+    padding: 0.8rem 1rem;
+    color: #b8ccd8;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    line-height: 1.5;
+  }
+
+  .data-table tr:hover td { background: rgba(0,245,255,0.02); }
+
+  /* INFO BOX */
+  .info-box {
+    background: rgba(124,58,237,0.08);
+    border: 1px solid rgba(124,58,237,0.25);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .info-box .info-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: var(--accent-violet);
+    text-transform: uppercase;
+    margin-bottom: 0.7rem;
+  }
+
+  .info-box p { font-size: 0.9rem; line-height: 1.7; color: #b0a8c8; }
+
+  /* MEMBER CARD */
+  .members-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.2rem;
+    margin-top: 1rem;
+  }
+
+  .member-card {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .member-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(0,245,255,0.08), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .member-card:hover::before { opacity: 1; }
+  .member-card:hover { border-color: rgba(0,245,255,0.4); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+
+  .member-avatar {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-violet));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', monospace;
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: white;
+    margin: 0 auto 0.8rem;
+    box-shadow: 0 4px 20px rgba(0,102,255,0.4);
+  }
+
+  .member-name {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .member-role {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--accent-cyan);
+    letter-spacing: 0.2em;
+    margin-top: 0.3rem;
+    text-transform: uppercase;
+  }
+
+  /* COMPONENT ICON CARDS */
+  .comp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+  }
+
+  .comp-card {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    transition: all 0.3s;
+  }
+
+  .comp-card:hover {
+    border-color: var(--s-accent, var(--accent-cyan));
+    background: rgba(0,245,255,0.03);
+    transform: translateY(-3px);
+  }
+
+  .comp-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.7rem;
+    filter: drop-shadow(0 0 10px rgba(0,245,255,0.3));
+    display: block;
+  }
+
+  .comp-card h4 {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--s-accent, var(--accent-cyan));
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .comp-card p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* ANIMATION TYPES */
+  .anim-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.8rem;
+    margin-top: 1rem;
+  }
+
+  .anim-item {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    background: var(--bg-panel);
+    transition: all 0.3s;
+  }
+
+  .anim-item:hover { border-color: var(--s-accent, var(--accent-cyan)); }
+
+  .anim-item .anim-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+
+  .anim-item h4 {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.7rem;
+    color: var(--s-accent, var(--accent-cyan));
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.3rem;
+  }
+
+  .anim-item p { font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 3rem 2rem;
+    text-align: center;
+    background: var(--bg-panel);
+  }
+
+  .footer-logo {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--accent-cyan);
+    text-shadow: var(--glow-cyan);
+    letter-spacing: 0.2em;
+    margin-bottom: 0.5rem;
+  }
+
+  footer p {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--text-muted);
+    margin: 0.3rem 0;
+    text-transform: uppercase;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SECTION SEPARATORS */
+  .full-sep {
+    position: relative;
+    z-index: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border), transparent);
+    margin: 0 2rem;
+  }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* COLOR ACCENTS PER SECTION */
+  #members { --s-accent: #00f5ff; }
+  #intro { --s-accent: #0066ff; }
+  #concept { --s-accent: #7c3aed; }
+  #components { --s-accent: #00ff88; }
+  #graphics { --s-accent: #ff006e; }
+  #audio { --s-accent: #f59e0b; }
+  #video { --s-accent: #06b6d4; }
+  #animation { --s-accent: #a855f7; }
+
+  /* HIGHLIGHT TEXT */
+  .hl { color: var(--s-accent, var(--accent-cyan)); font-weight: 600; }
+
+  /* IMPORTANCE NOTE */
+  .note-box {
+    background: rgba(245,158,11,0.07);
+    border: 1px solid rgba(245,158,11,0.2);
+    border-left: 3px solid #f59e0b;
+    border-radius: 0 6px 6px 0;
+    padding: 1rem 1.5rem;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #c8a84b;
+    line-height: 1.6;
+  }
+
+  .note-box strong { color: #f59e0b; }
+
+  /* STAT BARS */
+  .stat-row { margin: 0.8rem 0; }
+  .stat-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #b8ccd8;
+    margin-bottom: 0.3rem;
+    font-family: 'Share Tech Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  .stat-bar {
+    height: 4px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .stat-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--s-accent, var(--accent-cyan)), transparent);
+    border-radius: 2px;
+  }
+
+  /* SECTION BG ALTERNATING */
+  .section-alt {
+    background: linear-gradient(to bottom, transparent, rgba(0,245,255,0.01), transparent);
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <div class="nav-logo">⬡ MULTIMEDIA</div>
+  <ul class="nav-links">
+    <li><a href="#members">Team</a></li>
+    <li><a href="#intro">Intro</a></li>
+    <li><a href="#concept">Concept</a></li>
+    <li><a href="#components">Components</a></li>
+    <li><a href="#graphics">Graphics</a></li>
+    <li><a href="#audio">Audio</a></li>
+    <li><a href="#video">Video</a></li>
+    <li><a href="#animation">Animation</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-orbs">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+  </div>
+  <div class="hero-badge">Class 10 · Computer Science · CDC Nepal</div>
+  <h1>
+    <span class="line1">CHAPTER</span>
+    <span class="line2">MULTIMEDIA</span>
+  </h1>
+  <p class="hero-sub">A Complete Study of Multimedia Technology</p>
+  <div class="scroll-indicator">
+    <span>Explore Topics</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- TOPICS INDEX -->
+<div class="topics-index reveal">
+  <div class="section-header">
+    <div class="section-label">// navigation</div>
+    <div class="section-title">All Topics</div>
+  </div>
+  <div class="topics-grid">
+    <a href="#members" class="topic-card-mini" style="--card-accent:#00f5ff"><span class="topic-num">01</span><span class="topic-label">Group Members</span></a>
+    <a href="#intro" class="topic-card-mini" style="--card-accent:#0066ff"><span class="topic-num">02</span><span class="topic-label">Introduction</span></a>
+    <a href="#concept" class="topic-card-mini" style="--card-accent:#7c3aed"><span class="topic-num">03</span><span class="topic-label">Concept of Multimedia</span></a>
+    <a href="#components" class="topic-card-mini" style="--card-accent:#00ff88"><span class="topic-num">04</span><span class="topic-label">Components</span></a>
+    <a href="#graphics" class="topic-card-mini" style="--card-accent:#ff006e"><span class="topic-num">05</span><span class="topic-label">Graphics</span></a>
+    <a href="#audio" class="topic-card-mini" style="--card-accent:#f59e0b"><span class="topic-num">06</span><span class="topic-label">Audio</span></a>
+    <a href="#video" class="topic-card-mini" style="--card-accent:#06b6d4"><span class="topic-num">07</span><span class="topic-label">Video</span></a>
+    <a href="#animation" class="topic-card-mini" style="--card-accent:#a855f7"><span class="topic-num">08</span><span class="topic-label">Animation</span></a>
+  </div>
+</div>
+
+<div class="full-sep"></div>
+
+<!-- ══════════════════════════════════════════════════
+     SECTION 01 — GROUP MEMBERS
+══════════════════════════════════════════════════ -->
+<section id="members" class="content-section reveal">
+  <div class="section-divider">
+    <div class="divider-num">01</div>
+    <div class="divider-text">
+      <h2>Group Members</h2>
+      <p>// Project Collaborators</p>
+    </div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="card">
+    <h3>Our Team</h3>
+    <p>This multimedia project has been collaboratively prepared by the following students of Class 10. Each member has contributed to the research, content, and presentation of this educational resource based on the CDC Nepal curriculum.</p>
+  </div>
+
+  <div class="members-grid">
+    <div class="member-card">
+      <div class="member-avatar">PR</div>
+      <div class="member-name">Pabit Regmi</div>
+      <div class="member-role">Team Member</div>
+    </div>
+    <div class="member-card">
+      <div class="member-avatar">SS</div>
+      <div class="member-name">Sanjok Silwal</div>
+      <div class="member-role">Team Member</div>
+    </div>
+    <div class="member-card">
+      <div class="member-avatar">ARP</div>
+      <div class="member-name">Ankit Raj Pathak</div>
+      <div class="member-role">Team Member</div>
+    </div>
+    <div class="member-card">
+      <div class="member-avatar">KP</div>
+      <div class="member-name">Kalpit Pandey</div>
+      <div class="member-role">Team Member</div>
+    </div>
+    <div class="member-card">
+      <div class="member-avatar">AA</div>
+      <div class="member-name">Abhilekh Adhikari</div>
+      <div class="member-role">Team Member</div>
+    </div>
+  </div>
+</section>
+
+<div class="full-sep"></div>
+
+<!-- ══════════════════════════════════════════════════
+     SECTION 02 — INTRODUCTION
+══════════════════════════════════════════════════ -->
+<section id="intro" class="content-section reveal">
+  <div class="section-divider">
+    <div class="divider-num">02</div>
+    <div class="divider-text">
+      <h2>Introduction to Multimedia</h2>
+      <p>// What is Multimedia?</p>
+    </div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="def-box">
+    Multimedia is the use of multiple forms of media — such as text, graphics, audio, video, and animation — together in a single application or presentation to convey information in an effective and engaging manner.
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <h3>Definition</h3>
+      <p>The word <span class="hl">Multimedia</span> is derived from two Latin words: <em>"Multi"</em> meaning many, and <em>"Media"</em> meaning medium or means of communication.</p>
+      <p style="margin-top:0.8rem">Multimedia refers to the <span class="hl">integration of two or more types of media</span> controlled by a computer system to present information interactively. It combines text, graphics, sound, video, and animation to deliver content.</p>
+    </div>
+    <div class="card">
+      <h3>Key Features</h3>
+      <ul>
+        <li><strong>Interactive:</strong> Users can control the flow of information</li>
+        <li><strong>Non-linear:</strong> Can be accessed in any order</li>
+        <li><strong>Digital:</strong> All data is stored and processed digitally</li>
+        <li><strong>Multi-sensory:</strong> Engages sight and hearing simultaneously</li>
+        <li><strong>Integrated:</strong> Multiple media types work together</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:1.5rem">
+    <h3>Types of Multimedia</h3>
+    <div class="two-col">
+      <div>
+        <p><span class="hl">Linear Multimedia:</span> Content is presented in a sequential manner from start to finish without user interaction. Example: watching a movie or a video presentation.</p>
+      </div>
+      <div>
+        <p><span class="hl">Non-linear / Interactive Multimedia:</span> Users navigate through content freely, choosing what to view and when. Example: websites, educational software, video games.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:1.5rem">
+    <h3>Uses of Multimedia</h3>
+    <ul>
+      <li><strong>Education:</strong> e-learning platforms, interactive lessons, digital textbooks</li>
+      <li><strong>Entertainment:</strong> games, movies, music, animation</li>
+      <li><strong>Business:</strong> presentations, advertising, marketing materials</li>
+      <li><strong>Communication:</strong> video conferencing, social media, messaging</li>
+      <li><strong>Medicine:</strong> medical imaging, health education, simulation training</li>
+      <li><strong>Art & Design:</strong> digital art, graphic design, virtual reality</li>
+    </ul>
+  </div>
+</section>
+
+<div class="full-sep"></div>
+
+<!-- ══════════════════════════════════════════════════
+     SECTION 03 — CONCEPT OF MULTIMEDIA TECHNOLOGY
+══════════════════════════════════════════════════ -->
+<section id="concept" class="content-section reveal">
+  <div class="section-divider">
+    <div class="divider-num">03</div>
+    <div class="divider-text">
+      <h2>Concept of Multimedia Technology</h2>
+      <p>// Technology Behind Multimedia</p>
+    </div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="def-box">
+    Multimedia Technology refers to the hardware and software tools and techniques used to create, edit, store, transmit, and display multimedia content. It involves the combination of computing technology with various forms of media.
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <h3>Hardware Requirements</h3>
+      <ul>
+        <li><strong>Processor (CPU):</strong> High-speed processor to handle multimedia data</li>
+        <li><strong>RAM:</strong> Sufficient memory for smooth processing</li>
+        <li><strong>Hard Disk:</strong> Large storage capacity for media files</li>
+        <li><strong>Sound Card:</strong> For audio input and output</li>
+        <li><strong>Graphics Card:</strong> For rendering images and video</li>
+        <li><strong>Monitor:</strong> High-resolution display</li>
+        <li><strong>Speakers/Headphones:</strong> Audio output devices</li>
+        <li><strong>Microphone/Camera:</strong> Input devices for audio/video</li>
+        <li><strong>CD/DVD/Blu-ray Drive:</strong> For reading multimedia storage</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Software Requirements</h3>
+      <ul>
+        <li><strong>Media Players:</strong> VLC, Windows Media Player</li>
+        <li><strong>Image Editors:</strong> Adobe Photoshop, GIMP</li>
+        <li><strong>Video Editors:</strong> Adobe Premiere, DaVinci Resolve</li>
+        <li><strong>Audio Editors:</strong> Audacity, Adobe Audition</li>
+        <li><strong>Animation Software:</strong> Adobe Flash, Blender</li>
+        <li><strong>Presentation Tools:</strong> MS PowerPoint, Prezi</li>
+        <li><strong>Web Browsers:</strong> Chrome, Firefox for web multimedia</li>
+        <li><strong>Authoring Tools:</strong> Software to create multimedia applications</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:1.5rem">
+    <h3>Multimedia Applications</h3>
+    <ul>
+      <li><strong>Computer-Based Training (CBT):</strong> Interactive learning software for training employees or students</li>
+      <li><strong>Video Conferencing:</strong> Real-time communication using audio and video over a network</li>
+      <li><strong>Digital Libraries:</strong> Large collections of multimedia content accessible digitally</li>
+      <li><strong>Virtual Reality (VR):</strong> Immersive simulated environment using 3D graphics and sound</li>
+      <li><strong>Geographic Information Systems (GIS):</strong> Maps combined with multimedia data</li>
+      <li><strong>Electronic Publishing:</strong> Digital books, magazines, and newspapers</li>
+    </ul>
+  </div>
+
+  <div class="info-box">
+    <div class="info-title">// Key Concept</div>
+    <p>Multimedia technology works on the principle of digitization — converting all types of media (text, images, sound, video) into binary data (0s and 1s) that a computer can process, store, and transmit. This digital nature allows multimedia to be edited, copied, and distributed without loss of quality.</p>
+  </div>
+</section>
+
+<div class="full-sep"></div>
+
+<!-- ══════════════════════════════════════════════════
+     SECTION 04 — MULTIMEDIA COMPONENTS
+══════════════════════════════════════════════════ -->
+<section id="components" class="content-section reveal">
+  <div class="section-divider">
+    <div class="divider-num">04</div>
+    <div class="divider-text">
+      <h2>Multimedia Components</h2>
+      <p>// The Five Elements</p>
+    </div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="def-box">
+    Multimedia is made up of five major components or elements. Each component plays a specific role in creating a complete and effective multimedia experience. These components are: Text, Graphics, Audio, Video, and Animation.
+  </div>
+
+  <div class="comp-grid" style="margin-bottom:2rem">
+    <div class="comp-card">
+      <span class="comp-icon">📝</span>
+      <h4>Text</h4>
+      <p>Written words and characters. Most basic form of information.</p>
+    </div>
+    <div class="comp-card">
+      <span class="comp-icon">🖼️</span>
+      <h4>Graphics</h4>
+      <p>Still images, illustrations, charts, and visual elements.</p>
+    </div>
+    <div class="comp-card">
+      <span class="comp-icon">🎵</span>
+      <h4>Audio</h4>
+      <p>Sound, music, speech, and other auditory content.</p>
+    </div>
+    <div class="comp-card">
+      <span class="comp-icon">🎬</span>
+      <h4>Video</h4>
+      <p>Moving images captured and played back digitally.</p>
+    </div>
+    <div class="comp-card">
+      <span class="comp-icon">✨</span>
+      <h4>Animation</h4>
+      <p>Simulated movement created from a series of images.</p>
+    </div>
+  </div>
+
+  <div class="three-col">
+    <div class="card">
+      <h3>📝 Text</h3>
+      <p>Text is the most fundamental component of multimedia. It includes letters, numbers, and symbols used to convey information. In multimedia, text can be formatted with different <span class="hl">fonts, sizes, colors, and styles</span>. Hypertext allows linking text to other content.</p>
+    </div>
+    <div class="card">
+      <h3>🖼️ Graphics</h3>
+      <p>Graphics are visual representations of information. They make content more attractive and easier to understand. Graphics include <span class="hl">photographs, drawings, charts, diagrams, and illustrations</span>. They can be 2D or 3D.</p>
+    </div>
+    <div class="card">
+      <h3>🎵 Audio</h3>
+      <p>Audio adds the dimension of sound to multimedia. It includes <span class="hl">music, speech, sound effects, and narration</span>. Audio enhances the emotional impact of multimedia content and helps convey information through hearing.</p>
+    </div>
+  </div>
+
+  <div class="two-col" style="margin-top:1.5rem">
+    <div class="card">
+      <h3>🎬 Video</h3>
+      <p>Video consists of a sequence of still images (frames) displayed rapidly to create the illusion of motion. Digital video can be <span class="hl">recorded, edited, and stored</span> on computers. It combines both visual and audio elements to tell stories or demonstrate concepts.</p>
+    </div>
+    <div class="card">
+      <h3>✨ Animation</h3>
+      <p>Animation is the technique of creating the illusion of movement by displaying a series of images in rapid succession. Computer-generated animation can produce <span class="hl">2D and 3D effects</span> that are impossible to capture with live video cameras.</p>
+    </div>
+  </div>
+</section>
+
+<div class="full-sep"></div>
+
+<!-- ══════════════════════════════════════════════════
+     SECTION 05 — GRAPHICS
+══════════════════════════════════════════════════ -->
+<section id="graphics" class="content-section reveal">
+  <div class="section-divider">
+    <div class="divider-num">05</div>
+    <div class="divider-text">
+      <h2>Graphics</h2>
+      <p>// Visual Information</p>
+    </div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="def-box">
+    Graphics refer to visual images or designs on a surface, such as a computer screen. In multimedia, graphics are used to make the content visually appealing and to convey information that is difficult to express through text alone.
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <h3>Bitmap / Raster Graphics</h3>
+      <p>Also called <span class="hl">Raster graphics</span>, bitmap images are made up of a grid of tiny dots called <strong>pixels (picture elements)</strong>. Each pixel has a specific color value.</p>
+      <ul>
+        <li><strong>Characteristics:</strong> Resolution-dependent; lose quality when enlarged</li>
+        <li><strong>Best for:</strong> Photographs, complex color images</li>
+        <li><strong>File formats:</strong> BMP, JPEG, PNG, GIF, TIFF</li>
+        <li><strong>Software:</strong> Adobe Photoshop, MS Paint, GIMP</li>
+      </ul>
+      <div class="note-box"><strong>Note:</strong> The quality of a bitmap image depends on its resolution — the number of pixels per inch (PPI or DPI).</div>
+    </div>
+    <div class="card">
+      <h3>Vector Graphics</h3>
+      <p><span class="hl">Vector graphics</span> are created using mathematical equations to define shapes, lines, and colors. They use points, lines, curves, and polygons to represent images.</p>
+      <ul>
+        <li><strong>Characteristics:</strong> Resolution-independent; can be scaled to any size without losing quality</li>
+        <li><strong>Best for:</strong> Logos, icons, technical drawings</li>
+        <li><strong>File formats:</strong> SVG, AI, EPS, CDR</li>
+        <li><strong>Software:</strong> Adobe Illustrator, CorelDRAW, Inkscape</li>
+      </ul>
+      <div class="note-box"><strong>Note:</strong> Vector images can be resized infinitely without any loss of quality, making them ideal for logos.</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:1.5rem">
+    <h3>Comparison: Bitmap vs Vector</h3>
+    <table class="data-table">
+      <tr>
+        <th>Feature</th>
+        <th>Bitmap / Raster</th>
+        <th>Vector</th>
+      </tr>
+      <tr>
+        <td>Made up of</td>
+        <td>Pixels (dots)</td>
+        <td>Mathematical equations / paths</td>
+      </tr>
+      <tr>
+        <td>Scalability</td>
+        <td>Loses quality when enlarged (pixelation)</td>
+        <td>No quality loss at any size</td>
+      </tr>
+      <tr>
+        <td>File size</td>
+        <td>Larger</td>
+        <td>Smaller</td>
+      </tr>
+      <tr>
+        <td>Best for</td>
+        <td>Photographs, complex images</td>
+        <td>Logos, icons, line drawings</td>
+      </tr>
+      <tr>
+        <td>Editing</td>
+        <td>Pixel-by-pixel</td>
+        <td>Object-based (paths, nodes)</td>
+      </tr>
+      <tr>
+        <td>Common formats</td>
+        <td>JPEG, PNG, BMP, GIF</td>
+        <td>SVG, AI, EPS</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card" style="margin-top:1.5rem">
+    <h3>Image File Formats</h3>
+    <ul>
+      <li><strong>JPEG (Joint Photographic Experts Group):</strong> Compressed format best for photographs; lossy compression means some quality is lost</li>
+      <li><strong>PNG (Portable Network Graphics):</strong> Supports transparency; lossless compression; good for web graphics</li>
+      <li><strong>BMP (Bitmap):</strong> Uncompressed format; high quality but large file size; native to Windows</li>
+      <li><strong>GIF (Graphics Interchange Format):</strong> Supports animation and transparency; limited to 256 colors</li>
+      <li><strong>TIFF (Tagged Image File Format):</strong> High-quality format used in professional printing; large file size</li>
+    </ul>
+  </div>
+
+  <div class="card" style="margin-top:1.5rem">
+    <h3>Resolution in Graphics</h3>
+    <p>Resolution refers to the number of pixels in an image, typically expressed as <span class="hl">width × height</span> (e.g., 1920×1080). It is also measured in:</p>
+    <ul>
+      <li><strong>PPI (Pixels Per Inch):</strong> Used for screen/monitor display</li>
+      <li><strong>DPI (Dots Per Inch):</strong> Used for printed images</li>
+      <li>Higher resolution = more detail = larger file size</li>
+      <li>Standard web resolution: 72 PPI; Standard print resolution: 300 DPI</li>
+    </ul>
+  </div>
+</section>
+
+<div class="full-sep"></div>
+
+<!-- ══════════════════════════════════════════════════
+     SECTION 06 — AUDIO
+══════════════════════════════════════════════════ -->
+<section id="audio" class="content-section reveal">
+  <div class="section-divider">
+    <div class="divider-num">06</div>
+    <div class="divider-text">
+      <h2>Audio</h2>
+      <p>// Sound in Multimedia</p>
+    </div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="def-box">
+    Audio refers to sound that has been recorded, processed, or generated by a computer. In multimedia, audio adds an important dimension by engaging the sense of hearing. Digital audio is stored as binary data that represents sound waves.
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <h3>What is Digital Audio?</h3>
+      <p>Sound in nature is an <span class="hl">analog signal</span> — a continuous wave. To store sound in a computer, it must be converted into <span class="hl">digital format</span> through a process called:</p>
+      <ul>
+        <li><strong>Sampling:</strong> Measuring the sound wave at regular intervals (sampling rate)</li>
+        <li><strong>Quantization:</strong> Assigning numerical values to each sample</li>
+        <li><strong>Encoding:</strong> Converting values into binary code</li>
+      </ul>
+      <p style="margin-top:0.8rem">This conversion is done by an <span class="hl">Analog-to-Digital Converter (ADC)</span>.</p>
+    </div>
+    <div class="card">
+      <h3>Audio Terminology</h3>
+      <ul>
+        <li><strong>Sampling Rate:</strong> Number of samples taken per second; measured in Hz or kHz. CD quality = 44,100 Hz (44.1 kHz)</li>
+        <li><strong>Bit Depth:</strong> Number of bits per sample; higher bit depth = more dynamic range. CD quality = 16-bit</li>
+        <li><strong>Channels:</strong> Mono (1 channel), Stereo (2 channels), Surround (5.1 or 7.1)</li>
+        <li><strong>Bitrate:</strong> Amount of audio data per second (kbps); higher = better quality but larger file</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:1.5rem">
+    <h3>Types of Audio</h3>
+    <div class="two-col">
+      <ul>
+        <li><strong>Speech/Narration:</strong> Recorded human voice explaining content; widely used in e-learning and presentations</li>
+        <li><strong>Music:</strong> Background music or compositions that set mood and enhance user experience</li>
+        <li><strong>Sound Effects:</strong> Short sounds associated with actions or events (clicks, notifications, alerts)</li>
+      </ul>
+      <ul>
+        <li><strong>MIDI (Musical Instrument Digital Interface):</strong> Digital protocol that records musical notes rather than sound waves; allows electronic instruments to communicate</li>
+        <li><strong>Synthesized Sound:</strong> Sound generated entirely by software without any recording</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:1.5rem">
+    <h3>Audio File Formats</h3>
+    <table class="data-table">
+      <tr>
+        <th>Format</th>
+        <th>Full Name</th>
+        <th>Type</th>
+        <th>Characteristics</th>
+      </tr>
+      <tr>
+        <td>.MP3</td>
+        <td>MPEG Audio Layer 3</td>
+        <td>Lossy Compressed</td>
+        <td>Most popular; small size; some quality loss</td>
+      </tr>
+      <tr>
+        <td>.WAV</td>
+        <td>Waveform Audio File</td>
+        <td>Uncompressed</td>
+        <td>High quality; large file size; developed by Microsoft</td>
+      </tr>
+      <tr>
+        <td>.AAC</td>
+        <td>Advanced Audio Coding</td>
+        <td>Lossy Compressed</td>
+        <td>Better quality than MP3 at same bitrate; used by Apple</td>
+      </tr>
+      <tr>
+        <td>.FLAC</td>
+        <td>Free Lossless Audio Codec</td>
+        <td>Lossless Compressed</td>
+        <td>No quality loss; smaller than WAV; popular among audiophiles</td>
+      </tr>
+      <tr>
+        <td>.OGG</td>
+        <td>Ogg Vorbis</td>
+        <td>Lossy Compressed</td>
+        <td>Open-source alternative to MP3</td>
+      </tr>
+      <tr>
+        <td>.MIDI</td>
+        <td>Musical Instrument Digital Interface</td>
+        <td>Special</td>
+        <td>Stores musical instructions, not sound waves; very small size</td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<div class="full-sep"></div>
+
+<!-- ══════════════════════════════════════════════════
+     SECTION 07 — VIDEO
+══════════════════════════════════════════════════ -->
+<section id="video" class="content-section reveal">
+  <div class="section-divider">
+    <div class="divider-num">07</div>
+    <div class="divider-text">
+      <h2>Video</h2>
+      <p>// Frame Rate, Resolution & File Formats</p>
+    </div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="def-box">
+    Video is a sequence of still images (called frames) displayed rapidly in succession to create the illusion of motion. Digital video combines moving images with synchronized audio and is stored as digital data on a computer.
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <h3>Frame Rate (FPS)</h3>
+      <p><span class="hl">Frame rate</span> refers to the number of individual frames (still images) displayed per second in a video. It is measured in <strong>FPS (Frames Per Second)</strong>.</p>
+      <ul>
+        <li><strong>Film standard:</strong> 24 FPS — cinematic motion blur effect</li>
+        <li><strong>TV/Video standard:</strong> 25 FPS (PAL system) or 30 FPS (NTSC system)</li>
+        <li><strong>Gaming/Smooth video:</strong> 60 FPS — very smooth motion</li>
+        <li><strong>Slow motion:</strong> 120 FPS or higher, then played back slowly</li>
+        <li><strong>High Speed:</strong> 240+ FPS for extreme slow-motion</li>
+      </ul>
+      <div class="note-box"><strong>Key Point:</strong> Higher frame rate = smoother motion but larger file size. The human eye perceives motion at about 16 FPS; anything above 24 FPS looks smooth.</div>
+    </div>
+    <div class="card">
+      <h3>Video Resolution</h3>
+      <p><span class="hl">Resolution</span> in video refers to the number of pixels in each frame, expressed as <strong>width × height</strong>. Higher resolution means a clearer, sharper image.</p>
+      <ul>
+        <li><strong>SD (Standard Definition):</strong> 480p — 640×480 pixels</li>
+        <li><strong>HD (High Definition):</strong> 720p — 1280×720 pixels</li>
+        <li><strong>Full HD:</strong> 1080p — 1920×1080 pixels</li>
+        <li><strong>QHD / 2K:</strong> 1440p — 2560×1440 pixels</li>
+        <li><strong>4K / UHD:</strong> 2160p — 3840×2160 pixels</li>
+        <li><strong>8K:</strong> 4320p — 7680×4320 pixels</li>
+      </ul>
+      <div class="note-box"><strong>Key Point:</strong> Higher resolution = more pixels = sharper image = larger file size and requires more processing power.</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:1.5rem">
+    <h3>Aspect Ratio</h3>
+    <p>Aspect ratio is the proportional relationship between the width and height of a video frame.</p>
+    <ul>
+      <li><strong>4:3</strong> — Traditional TV format (old televisions, computer monitors)</li>
+      <li><strong>16:9</strong> — Widescreen format; standard for HD TV, YouTube, modern displays</li>
+      <li><strong>21:9</strong> — Cinematic ultra-wide format used in movies</li>
+      <li><strong>1:1</strong> — Square format used in social media (Instagram)</li>
+      <li><strong>9:16</strong> — Vertical format for mobile video (TikTok, Instagram Stories)</li>
+    </ul>
+  </div>
+
+  <div class="card" style="margin-top:1.5rem">
+    <h3>Video File Formats</h3>
+    <table class="data-table">
+      <tr>
+        <th>Format</th>
+        <th>Full Name</th>
+        <th>Characteristics & Use</th>
+      </tr>
+      <tr>
+        <td>.MP4</td>
+        <td>MPEG-4 Part 14</td>
+        <td>Most widely used; good quality with small size; supported everywhere</td>
+      </tr>
+      <tr>
+        <td>.AVI</td>
+        <td>Audio Video Interleave</td>
+        <td>Microsoft format; large file size; high quality; widely compatible</td>
+      </tr>
+      <tr>
+        <td>.MOV</td>
+        <td>QuickTime Movie</td>
+        <td>Apple format; high quality; used in professional video editing</td>
+      </tr>
+      <tr>
+        <td>.WMV</td>
+        <td>Windows Media Video</td>
+        <td>Microsoft format; smaller file size; good for Windows systems</td>
+      </tr>
+      <tr>
+        <td>.MKV</td>
+        <td>Matroska Video</td>
+        <td>Open format; can hold multiple audio/subtitle tracks; popular for movies</td>
+      </tr>
+      <tr>
+        <td>.FLV</td>
+        <td>Flash Video</td>
+        <td>Used for streaming video over the internet; requires Flash player</td>
+      </tr>
+      <tr>
+        <td>.MPEG</td>
+        <td>Moving Picture Experts Group</td>
+        <td>Older standard; used for DVD and VCD; compressed format</td>
+      </tr>
+      <tr>
+        <td>.WebM</td>
+        <td>Web Media</td>
+        <td>Open format optimized for web browsers; used in HTML5 video</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="info-box">
+    <div class="info-title">// Video Codec</div>
+    <p>A <strong>codec (Compressor-Decompressor)</strong> is software that compresses video for storage and decompresses it for playback. Common video codecs include H.264, H.265 (HEVC), VP9, and AV1. The codec determines how efficiently a video is compressed, affecting both quality and file size.</p>
+  </div>
+</section>
+
+<div class="full-sep"></div>
+
+<!-- ══════════════════════════════════════════════════
+     SECTION 08 — ANIMATION
+══════════════════════════════════════════════════ -->
+<section id="animation" class="content-section reveal">
+  <div class="section-divider">
+    <div class="divider-num">08</div>
+    <div class="divider-text">
+      <h2>Animation</h2>
+      <p>// Concept & Types</p>
+    </div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="def-box">
+    Animation is the process of creating the illusion of motion by displaying a series of static images (frames) in rapid sequence. The word animation comes from the Latin "animare" meaning "to give life to." Computer animation uses digital techniques to simulate movement.
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <h3>Concept of Animation</h3>
+      <p>Animation works on the principle of <span class="hl">Persistence of Vision</span> — the human eye retains an image for a fraction of a second after it disappears. When images are shown in rapid succession (typically 12–24 frames per second), the brain perceives them as continuous motion.</p>
+      <ul style="margin-top:0.8rem">
+        <li><strong>Frame:</strong> A single still image in an animation sequence</li>
+        <li><strong>Keyframe:</strong> An important frame that defines the start or end of a motion</li>
+        <li><strong>In-betweening (Tweening):</strong> Automatically generating frames between keyframes</li>
+        <li><strong>Timeline:</strong> A visual representation of the sequence of frames</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Traditional vs Computer Animation</h3>
+      <p><span class="hl">Traditional Animation (Hand-drawn):</span> Artists draw each frame individually on paper or celluloid. Also called "cel animation." Very time-consuming but gives a unique artistic style.</p>
+      <p style="margin-top:0.8rem"><span class="hl">Computer Animation:</span> Uses software to create and manipulate images digitally. Can be 2D or 3D. Much faster and offers more possibilities than traditional animation.</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:1.5rem">
+    <h3>Types of Animation</h3>
+    <div class="anim-strip">
+      <div class="anim-item">
+        <div class="anim-icon">🖊️</div>
+        <h4>2D Animation</h4>
+        <p>Animation in two-dimensional space. Flat characters and backgrounds. Used in cartoons, GIFs, educational videos.</p>
+      </div>
+      <div class="anim-item">
+        <div class="anim-icon">🎭</div>
+        <h4>3D Animation</h4>
+        <p>Objects and characters are modeled in three-dimensional space. Used in movies, games. Example: Toy Story.</p>
+      </div>
+      <div class="anim-item">
+        <div class="anim-icon">📎</div>
+        <h4>Stop Motion</h4>
+        <p>Physical objects are photographed one frame at a time, moved slightly between shots. Example: Claymation.</p>
+      </div>
+      <div class="anim-item">
+        <div class="anim-icon">⬛</div>
+        <h4>Flipbook</h4>
+        <p>Series of drawings on pages that create animation when flipped quickly. The earliest form of animation.</p>
+      </div>
+      <div class="anim-item">
+        <div class="anim-icon">🕺</div>
+        <h4>Motion Capture</h4>
+        <p>Recording real movement of actors/objects and applying to digital characters. Used in advanced films and games.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="two-col" style="margin-top:1.5rem">
+    <div class="card">
+      <h3>Animation Software</h3>
+      <ul>
+        <li><strong>Adobe Animate (Flash):</strong> Popular for web and 2D animation</li>
+        <li><strong>Blender:</strong> Free, open-source 3D animation software</li>
+        <li><strong>Autodesk Maya:</strong> Professional 3D animation used in films</li>
+        <li><strong>3DS Max:</strong> 3D modeling and animation by Autodesk</li>
+        <li><strong>Adobe After Effects:</strong> Motion graphics and visual effects</li>
+        <li><strong>Pencil2D:</strong> Simple open-source 2D animation</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Applications of Animation</h3>
+      <ul>
+        <li><strong>Entertainment:</strong> Animated movies, cartoons, TV shows</li>
+        <li><strong>Education:</strong> Animated tutorials, science explanations</li>
+        <li><strong>Advertising:</strong> Animated commercials and brand logos</li>
+        <li><strong>Games:</strong> Character movement and special effects</li>
+        <li><strong>Medical:</strong> Visualizing body processes and surgeries</li>
+        <li><strong>Architecture:</strong> Virtual walkthroughs of buildings</li>
+        <li><strong>Web Design:</strong> Interactive animations and transitions</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <div class="info-title">// Animation File Formats</div>
+    <p><strong>GIF (Graphics Interchange Format):</strong> Simple animated images for web use. <strong>SWF (Shockwave Flash):</strong> Adobe Flash animation format. <strong>MP4/MOV:</strong> Video formats also used for animations. <strong>CSS/JavaScript:</strong> Web-based animations on websites. <strong>FBX:</strong> 3D animation exchange format used between software.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">⬡ MULTIMEDIA</div>
+  <p>Class 10 Computer Science — CDC Nepal Curriculum</p>
+  <p style="margin-top:1rem; opacity:0.5">Group Members: Pabit Regmi · Sanjok Silwal · Ankit Raj Pathak · Kalpit Pandey · Abhilekh Adhikari</p>
+  <p style="margin-top:0.5rem; opacity:0.4">All content follows the CDC Nepal Class 10 Computer Science curriculum</p>
+</footer>
+
+<script>
+// Scroll reveal animation
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(el => {
+    if (el.isIntersecting) {
+      el.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Add reveal class to all cards
+document.querySelectorAll('.card, .member-card, .comp-card, .anim-item, .topic-card-mini').forEach((el, i) => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(15px)';
+  el.style.transition = `opacity 0.5s ease ${i * 0.05}s, transform 0.5s ease ${i * 0.05}s`;
+
+  const cardObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+        cardObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  cardObs.observe(el);
+});
+
+// Active nav highlight on scroll
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) current = s.getAttribute('id');
+  });
+  navLinks.forEach(a => {
+    a.style.color = '';
+    a.style.borderColor = '';
+    a.style.background = '';
+    if (a.getAttribute('href') === '#' + current) {
+      a.style.color = 'var(--accent-cyan)';
+      a.style.borderColor = 'var(--accent-cyan)';
+      a.style.background = 'rgba(0,245,255,0.08)';
+    }
+  });
+});
+</script>
+</body>
+</html>
